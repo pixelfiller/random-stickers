@@ -1,6 +1,5 @@
 
 require('dotenv').config();
-// const { getImageData } = require('./drawImage');
 const Telegraf = require('telegraf');
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ownerId = parseInt(process.env.ADMIN_ID, 10);
@@ -8,6 +7,10 @@ const ownerId = parseInt(process.env.ADMIN_ID, 10);
 const { 
     getRandomImageLink 
 } = require('./getRandomImageLink');
+
+const {
+    removeUdentifiedImages
+} = require('./utils')
 
 const {
     clearCanvas,
@@ -60,7 +63,7 @@ async function getEmptySticker() {
 
 function generateImages() {
     imagesData = [];
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < stickersNumber + 10; i++) {
         getRandomImage();
     }
 }
@@ -126,16 +129,19 @@ async function updateStickers() {
         `${stickerSetName}_by_${botUsername}`
     )
     let stickersData = []
+    console.log(imagesData.length) // >= stikersDataIDs.length
+    // check if there is "udentified" in array
+    removeUdentifiedImages(imagesData);
+
     stickersData = await stickerSet.stickers
     const stikersDataIDs = await stickersData.map(element => element.file_id);
-    console.log(stikersDataIDs.length)
-    for (let i = 0; i < stickersNumber; i++) {
+    for (let i = 0; i < stikersDataIDs.length; i++) {
 
         await bot.telegram.deleteStickerFromSet(stikersDataIDs[i]) // fix: Error: 400: Bad Request: sticker is not specified
         await bot.telegram.addStickerToSet(
             ownerId,
             `${stickerSetName}_by_${botUsername}`, {
-            png_sticker: await getStickerFile(i), // fix: TypeError: Cannot read property 'split' of undefined
+            png_sticker: await getStickerFile(i), 
             emojis: getRandomEmoji(),
             mask_position: undefined,
         },
@@ -147,7 +153,7 @@ async function updateStickers() {
 
 
 async function getStickerFile(i) {
-    let result = Buffer.from(imagesData[i].split(",")[1], 'base64');
+    let result = Buffer.from(imagesData[i].split(",")[1], 'base64'); // fix: TypeError: Cannot read property 'split' of undefined
     const file = await bot.telegram.uploadStickerFile(ownerId, {
         source: result
     })
@@ -156,4 +162,5 @@ async function getStickerFile(i) {
 
 
 bot.launch()
+
 
