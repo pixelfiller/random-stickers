@@ -9,7 +9,7 @@ const {
 } = require('./getRandomImageLink');
 
 const {
-    removeUdentifiedImages
+    removeUndefinedImages
 } = require('./utils')
 
 const {
@@ -130,8 +130,8 @@ async function updateStickers() {
     )
     let stickersData = []
     console.log(imagesData.length) // >= stikersDataIDs.length
-    // check if there is "udentified" in array
-    removeUdentifiedImages(imagesData);
+    // check if there is "undefined" in array
+    removeUndefinedImages(imagesData);
 
     stickersData = await stickerSet.stickers
     const stikersDataIDs = await stickersData.map(element => element.file_id);

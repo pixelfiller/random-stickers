@@ -1,6 +1,6 @@
 
 module.exports = {
-    removeUdentifiedImages: function removeUdentifiedImages(arr) {
+    removeUndefinedImages: function removeUndefinedImages(arr) {
         var i = 0;
         while (i < arr.length) {
             if (arr[i] === "undefined") {
