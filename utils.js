@@ -11,4 +11,7 @@ module.exports = {
         }
         return arr;
     },
+    getTimestamp: function getTimestamp() {
+        return Date(Date.now()).toString()
+    }
 }
