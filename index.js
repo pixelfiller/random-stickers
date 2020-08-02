@@ -133,7 +133,6 @@ setInterval(generateImages, 250000)
 setInterval(updateStickers, 300000)
 async function updateStickers() {
     console.log('Updating stickers...');
-    console.log(`Preloaded ImagesData = ${imagesData.length} objects`);
     const botUsername = 'randomGenerative_bot';
     const stickerSet = await bot.telegram.getStickerSet(
         `${stickerSetName}_by_${botUsername}`
@@ -170,7 +169,7 @@ async function removeAllStickers() {
     for (let i = 0; i < stikersDataIDs.length; i++) {
         await bot.telegram.deleteStickerFromSet(stikersDataIDs[i]); 
     }
-    console.log(`Stickers deleted successfully on: ${getTimestamp()}`);
+    // console.log(`Stickers deleted successfully on: ${getTimestamp()}`);
 }
 
 async function getStickerFile(i) {
@@ -179,7 +178,7 @@ async function getStickerFile(i) {
     const file = await bot.telegram.uploadStickerFile(ownerId, {
         source: result
     })
-    console.log(`Sticker #${i + 1} uploaded.`);
+    // console.log(`Sticker #${i + 1} uploaded.`);
     return file.file_id
 }
 
